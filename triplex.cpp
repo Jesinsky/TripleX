@@ -1,20 +1,21 @@
 #include <iostream>
+#include <ctime>
 
-void PrintIntroduction()
+void PrintIntroduction(int LevelDifficulty)
 {
     // Print welcome message to the terminal.
-    std::cout << "\n\nYou are a secrete agent breaking into a secure server room...\n";
-    std::cout << "Enter the correct code to continue...\n\n";
+    std::cout << "\n\nYou are a secrete agent breaking into a level " << LevelDifficulty;
+    std::cout << " secure server room...\nEnter the correct code to continue...\n\n";
 }
 
-bool PlayGame()
+bool PlayGame(int LevelDifficulty)
 {
-    PrintIntroduction();
+    PrintIntroduction(LevelDifficulty);
 
     // Declare 3 number code.
-    const int CodeA = 4;
-    const int CodeB = 5;
-    const int CodeC = 7;
+    const int CodeA = rand() % LevelDifficulty + LevelDifficulty;
+    const int CodeB = rand() % LevelDifficulty + LevelDifficulty;
+    const int CodeC = rand() % LevelDifficulty + LevelDifficulty;
 
     const int CodeSum = CodeA + CodeB + CodeC;
     const int CodeProduct = CodeA * CodeB * CodeC;
@@ -37,25 +38,35 @@ bool PlayGame()
     // Check if the players guess is correct.
     if (GuessSum == CodeSum && GuessProduct == CodeProduct)
     {
-        std::cout << "\nTou win!";
+        std::cout << "\n*** Well done agent! You have extracted a file! Keep going! ***";
         return true;
     }
 
-    else
+    else 
     {
-        std::cout << "\nYou lose!";
+        std::cout << "\n*** You entered a wrong! Carefully agent! Try again! ***";
         return false;
     }
 }
 
 int main()
 {
-    while (true)
+    srand(time(NULL)); // Create a random sequence based on time of day.
+    int LevelDifficulty = 1;
+    int const MaxDifficulty = 3;
+
+    while (LevelDifficulty <= MaxDifficulty) // Loop game until all levels completed.
     {
-        bool bLevelComplete = PlayGame();
+        bool bLevelComplete = PlayGame(LevelDifficulty);
         std::cin.clear(); // Clears any error.
         std::cin.ignore(); // Discards the buffer.
+
+        if (bLevelComplete)
+        {
+            ++LevelDifficulty;
+        }
     }
-    
+    std::cout << "\n*** Great work agent! You got all the files! Now get out of there! ***";
     return 0;
+    
 }
